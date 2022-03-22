@@ -1,0 +1,44 @@
+<div class="logo text-center">
+  <a class="user-wrapper" [routerLink]="['/account']">
+    <div class="logo-img">
+      <img src="assets/img/avatar.jpg" appImgPreview [image]="user?.avatar" />
+    </div>
+    <div class="fullname">{{ user?.fullname }}</div>
+  </a>
+  <button class="btn btn-sm btn-danger" (click)="logout()" [disabled]="syncing">
+    <i class="material-icons">logout</i>&#160;LOGOUT
+  </button>
+</div>
+
+<div class="sidebar-wrapper">
+  <ul class="nav">
+    <ng-container *ngFor="let menuItem of menuItems">
+      <li *ngIf="menuItem.role.includes(user?.role)"
+        routerLinkActive="active" 
+        class="{{ menuItem.class }} nav-item"
+      >
+        <a class="nav-link" [routerLink]="[menuItem.path]">
+          <i class="material-icons">{{ menuItem.icon }}</i>
+          <p>
+            {{ menuItem.title }}
+            <i *ngIf="menuItem.subItems" class="material-icons pull-right"
+              >keyboard_arrow_down</i
+            >
+          </p>
+        </a>
+        <ul class="nav subnav" *ngIf="menuItem.subItems">
+          <li
+            routerLinkActive="active"
+            *ngFor="let subItem of menuItem.subItems"
+            class="nav-item"
+          >
+            <a class="nav-link" [routerLink]="[subItem.path]">
+              <i class="material-icons">{{ subItem.icon }}</i>
+              <p>{{ subItem.title }}</p>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</div>

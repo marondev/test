@@ -1,0 +1,9 @@
+<mat-dialog-content
+  >Are you sure you want to delete this item?
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="btn-cancel">No</button>
+  <button mat-button (click)="destroy()" cdkFocusInitial class="btn-save">
+    Yes
+  </button>
+</mat-dialog-actions>

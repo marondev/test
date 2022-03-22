@@ -1,0 +1,8 @@
+.password-icon {
+  background-color: #fff;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  margin-top: -25px;
+  padding: 7px;
+}

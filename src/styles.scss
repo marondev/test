@@ -1,0 +1,244 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+.pointer {
+  cursor: pointer;
+}
+.pull-left {
+  float: left !important;
+}
+.pull-right {
+  float: right !important;
+}
+.full-width {
+  width: 100%;
+}
+.disp-none {
+  display: none;
+}
+.disp-block {
+  display: block;
+}
+.border-white {
+  border: 1px solid #fff !important;
+}
+
+.card-header {
+  .mat-form-field-appearance-legacy {
+    .mat-form-field-label {
+      color: #fff;
+    }
+    .mat-form-field-underline {
+      background-color: #fff;
+    }
+  }
+}
+
+.mat-dialog-title {
+  text-transform: capitalize;
+}
+
+.mat-dialog-actions {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-top: 30px;
+  button {
+    text-transform: capitalize;
+  }
+}
+
+.mat-simple-snackbar-action {
+  .mat-button {
+    background-color: #eee;
+    color: #000;
+    margin-left: 10px;
+  }
+}
+
+.snackbar-error {
+  color: #fff;
+  background-color: #ce0000;
+}
+
+.snackbar-success {
+  color: #fff;
+  background-color: #018d24;
+}
+
+.snackbar-info {
+  color: #fff;
+  background-color: #1976d2;
+}
+
+.no-result {
+  color: rgb(77, 77, 77);
+}
+
+.no-result-title {
+  color: rgb(77, 77, 77);
+  font-size: .9em;
+}
+
+.no-result-sub {
+  color: rgb(99, 99, 99);
+  font-size: .8em;
+}
+
+.header-actions {
+  .mat-select-value {
+    color: #fff;
+  }
+  .mat-select {
+    margin-top: 3px;
+  }
+  .mat-select-arrow {
+    color: #fff;
+  }
+}
+
+.scrollable {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(13deg, #e0e0e0 14%, #bdbdbd 64%);
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(13deg, #d1d1d1 14%, #a3a3a3 64%);
+  }
+  ::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    box-shadow: inset 7px 30px 12px #f0f0f0;
+  }
+}
+
+.form-data-wrapper {
+  max-height: 350px;
+  overflow-y: auto;
+  .form-data-content {
+    height: auto;
+  }
+}
+
+.file-wrapper {
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  padding: 0 5px 10px 0;
+  background-color: rgb(252, 252, 252);
+  .btn-file-upload {
+    border: 2px dashed #86f2ff !important;
+  }
+  .table-responsive {
+    max-height: 340px;
+    overflow: overlay;
+  }
+  .form-table {
+    table-layout: fixed;
+    .form-files {
+      padding: 3px 7px;
+      border-radius: 3px;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border: 1px solid #ddd;
+      width: 100%;
+      color: rgb(88, 88, 88);
+    }
+    th {
+      top: 0;
+      z-index: 2;
+      position: -webkit-sticky;
+      position: sticky;
+      font-size: 0.9em !important;
+      background-color: rgb(252, 252, 252);
+    }
+    td {
+      z-index: 1;
+      font-size: 0.9em;
+      color: rgb(88, 88, 88);
+      padding: 8px !important;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      white-space: normal;
+    }
+  }
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgb(211, 211, 211);
+  text-align: center;
+  .avatar {
+    width: 130px;
+  }
+  .avatar-text {
+    background-color: rgba(43, 43, 43, 0.5);
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    font-size: 0.7em;
+    text-align: center;
+    padding: 6px 0;
+  }
+}
+
+.btn-cancel {
+  background-color: rgb(245, 245, 245) !important;
+}
+
+.btn-save {
+  background-color: #1565c0 !important;
+  color: #fff !important;
+  &:disabled {
+    background-color: #8eb1d8 !important;
+  }
+}
+.not-allowed {
+  .mat-select-value-text {
+    color: #000;
+  }
+  .mat-form-field-underline {
+    display: none;
+  }
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  border-top-color: #000000;
+  animation: spinner .8s linear infinite;
+}

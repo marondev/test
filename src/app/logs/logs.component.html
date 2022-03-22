@@ -1,0 +1,55 @@
+<div class="card">
+  <div class="card-header card-header-primary header-actions">
+    <h4 class="mb-0">Logs</h4>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="text-primary">
+          <tr>
+            <th>Date</th>
+            <th>Entity</th>
+            <th>Description</th>
+            <th width="150" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs">
+            <td>{{ log.created_at | date: "medium" }}</td>
+            <td>{{ log.entity }}</td>
+            <td>{{ log.description }}</td>
+            <td>{{ log.action }}</td>
+          </tr>
+          <tr *ngIf="logs.length == 0">
+            <td colSpan="4" class="text-center">
+              <h3 class="no-result">No result</h3>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav
+      aria-label="Pagination"
+      *ngIf="paginator && paginator.displayPages.length"
+    >
+      <ul class="pagination justify-content-end">
+        <li class="page-item pointer" [class.disabled]="!paginator.hasPrev">
+          <a class="page-link" (click)="prevPage()" tabindex="-1">Previous</a>
+        </li>
+        <li
+          *ngFor="let displayPage of paginator.displayPages"
+          class="page-item pointer"
+          [class.active]="paginator.currrentPage == displayPage"
+        >
+          <a class="page-link" (click)="goToPage(displayPage)">{{
+            displayPage
+          }}</a>
+        </li>
+        <li class="page-item pointer" [class.disabled]="!paginator.hasNext">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

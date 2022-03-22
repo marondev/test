@@ -1,0 +1,252 @@
+<h2 mat-dialog-title>
+  <i class="material-icons" style="font-size: 0.8em">{{ titleIcon }}</i>
+  {{ data.title }}
+</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="container-fluid scrollable" #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div class="row">
+      <div class="col" *ngIf="data.inputs">
+        <div class="row form-data-wrapper">
+          <div class="col form-data-content">
+            <div class="row">
+              <mat-form-field
+                [class.not-allowed]="isView"
+                *ngFor="let input of data.inputs" 
+                [ngClass]="input?.class ? input.class : 'col-12'"
+              >
+                <!-- ________________ Text, Date ________________ -->
+                <input
+                  *ngIf="input.type === 'text' || input.type === 'date'"
+                  matInput
+                  [type]="input.type"
+                  [name]="input.name"
+                  [(ngModel)]="input.value"
+                  [placeholder]="input.placeholder || ''"
+                  [required]="input.required || false"
+                  [maxlength]="input.maxlength || 100"
+                  ngModel
+                  [readonly]="isView"
+                />
+
+                <!-- ________________ Text Area ________________ -->
+                <ng-container *ngIf="input.type === 'textarea'">
+                  <textarea
+                    matInput
+                    [name]="input.name"
+                    [(ngModel)]="input.value"
+                    [required]="input.required || false"
+                    [placeholder]="input.placeholder || ''"
+                    [maxlength]="input.maxlength"
+                    ngModel
+                    [readonly]="isView"
+                  ></textarea>
+                </ng-container>
+
+                <!-- ________________ Dynamic Select and Author ________________ -->
+                <ng-container
+                  *ngIf="
+                    input.type === 'select' && !['co_authors', 'co_sponsors', 'committees'].includes(
+                      input.name
+                    )
+                  "
+                >
+                  <mat-select
+                    [name]="input.name"
+                    [(ngModel)]="input.value"
+                    [placeholder]="input.placeholder || ''"
+                    [required]="input.required || false"
+                    ngModel
+                    [disabled]="isView"
+                  >
+                    <!-- ________________ Dynamic ________________ -->
+                    <ng-container *ngIf="input.name !== 'author_id'">
+                      <mat-option
+                        *ngFor="let option of input.optionSelect"
+                        [value]="option.id"
+                        >{{ option.name }}</mat-option
+                      >
+                    </ng-container>
+
+                    <!-- ________________ Author ________________ -->
+                    <ng-container *ngIf="input.name === 'author_id'">
+                      <mat-option
+                        *ngFor="let author of authors"
+                        [value]="author.id"
+                      >
+                        Hon. {{ author.name }}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                </ng-container>
+
+                <ng-container
+                  *ngIf="input.type === 'select' && input.name === 'committees'"
+                >
+                  <mat-label>Committee</mat-label>
+                  <mat-select name="committees" ngModel required multiple [disabled]="isView">
+                    <mat-option
+                      *ngFor="let committee of allCommittees"
+                      [value]="committee.id"
+                      >{{ committee.name }}</mat-option
+                    >
+                  </mat-select>
+                </ng-container>
+
+                <!-- ________________ Committees ________________ -->
+                <!-- <ng-container *ngIf="input.type === 'select' && input.name === 'committees'">
+                  <mat-chip-list #committeeChip aria-label="Committee selection">
+                    <mat-chip
+                      *ngFor="let selectedCommittee of selectedCommittees"
+                      [selectable]="selectableCommittee"
+                      [removable]="removableCommittee"
+                      (removed)="removeCommittee(selectedCommittee)"
+                    >
+                      {{ selectedCommittee?.name }}
+                      <mat-icon matChipRemove *ngIf="removableCommittee"
+                        >cancel</mat-icon
+                      >
+                    </mat-chip>
+                    <input
+                      placeholder="Select Committee *"
+                      [matAutocomplete]="auto"
+                      [matChipInputFor]="committeeChip"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    />
+                  </mat-chip-list>
+                  <mat-autocomplete
+                    #auto="matAutocomplete"
+                    (optionSelected)="selectCommittee($event)"
+                  >
+                    <mat-option
+                      *ngFor="let filteredCommittee of filteredCommittees"
+                      [value]="filteredCommittee.id"
+                    >
+                      {{ filteredCommittee.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </ng-container> -->
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!isView">
+        <div
+          *ngIf="data.hasFile"
+          class="file-wrapper scrollable"
+          [ngClass]="data.inputs ? 'col-6' : 'col'"
+        >
+          <div
+            *ngIf="data.action === 'create'"
+            class="text-center image-upload"
+            ng2FileDrop
+            [ngClass]="{ 'file-over': hasBaseDropZoneOver }"
+            (fileOver)="fileOverBase($event)"
+            [uploader]="uploader"
+          >
+            <button
+              type="button"
+              class="btn btn-info btn-file-upload"
+              (click)="file.click()"
+            >
+              {{ constant.fileConst.upload }}
+            </button>
+
+            <input
+              #file
+              type="file"
+              name="files[]"
+              ng2FileSelect
+              [uploader]="uploader"
+              multiple
+              class="disp-none"
+              accept="application/pdf"
+            />
+          </div>
+
+          <div
+            class="table-responsive"
+            *ngIf="files.length > 0; else elseNoFile"
+          >
+            <table class="table mt-3 form-table">
+              <thead class="text-primary">
+                <tr>
+                  <th>Title</th>
+                  <th width="50"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let file of files; let i = index">
+                  <td>
+                    <input
+                      type="text"
+                      [value]="file.title"
+                      class="pull-left form-files"
+                      (input)="updateFileTitle($event.target.value, i)"
+                      [disabled]="data.action !== 'create'"
+                    />
+                  </td>
+                  <td nowrap *ngIf="data.action === 'create'">
+                    <button
+                      (click)="removeItem(i)"
+                      mat-raised-button
+                      type="button"
+                      matTooltip="Remove"
+                      [matTooltipPosition]="'right'"
+                      class="btn btn-danger btn-link btn-sm btn-just-icon"
+                    >
+                      <i class="material-icons">close</i>
+                    </button>
+                  </td>
+
+                  <td nowrap *ngIf="data.action === 'view'">
+                    <button
+                      (click)="viewFile(i)"
+                      mat-raised-button
+                      type="button"
+                      matTooltip="View this file"
+                      [matTooltipPosition]="'right'"
+                      class="btn btn-primary btn-link btn-sm btn-just-icon"
+                    >
+                      <i class="material-icons">visibility</i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ng-template #elseNoFile>
+            <div
+              class="text-center"
+              [ngStyle]="{
+                'margin-top': data.action === 'view' ? '100px' : '60px'
+              }"
+              *ngIf="data.action !== 'create'"
+            >
+              <img src="assets/img/nofile.png" width="100" />
+              <div class="no-result-title">{{ constant.fileConst.noFiles }}</div>
+              <div class="no-result-sub">
+                {{ constant.fileConst.didntUpload }}
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+
+    <mat-dialog-actions class="mt-1" *ngIf="!isView">
+      <button mat-button mat-dialog-close class="btn-cancel">Cancel</button>
+      <button
+        mat-button
+        type="submit"
+        class="btn-save"
+        [disabled]="!f.valid || isSaving"
+        [class.spinner]="isSaving"
+      >
+        {{ data.action === "update" ? data.action : "Save" }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

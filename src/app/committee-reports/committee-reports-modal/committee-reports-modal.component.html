@@ -1,0 +1,219 @@
+<h2 mat-dialog-title>
+  <i class="material-icons" style="font-size: 0.8em">{{ titleIcon }}</i>
+  {{ data.title }}
+</h2>
+<mat-dialog-content class="mat-typography">
+  <form
+    class="container-fluid scrollable"
+    [formGroup]="committeeReportsForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="row">
+      <div class="col">
+        <div class="row form-data-wrapper">
+          <div class="col form-data-content">
+            <div class="row mt-3">
+              <mat-form-field class="col-6" [class.not-allowed]="isView">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="C.R. Number"
+                  formControlName="number"
+                  maxlength="50"
+                  [readonly]="isView"
+                />
+              </mat-form-field>
+
+              <mat-form-field class="col-6" [class.not-allowed]="isView">
+                <input
+                  matInput
+                  type="date"
+                  placeholder="Date Delivered"
+                  formControlName="delivery_date"
+                  [readonly]="isView"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-select placeholder="Type" formControlName="type" [disabled]="isView">
+                  <mat-option *ngFor="let type of types" [value]="type.name">{{
+                    type.name
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-label>Committee</mat-label>
+                <mat-select formControlName="committees" multiple [disabled]="isView">
+                  <mat-option
+                    *ngFor="let committee of allCommittees"
+                    [value]="committee.id"
+                    >{{ committee.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <div class="col" [class.not-allowed]="isView">
+                <mat-checkbox
+                  #isCommittee
+                  (change)="setIsCommittee(isCommittee)"
+                  formControlName="is_committee"
+                  [disabled]="isView"
+                  >Committee of the whole</mat-checkbox
+                >
+              </div>
+            </div>
+
+            <div class="row">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-select placeholder="Author" formControlName="author_id" [disabled]="isView">
+                  <mat-option *ngFor="let author of authors" [value]="author.id">
+                    Hon. {{ author.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-select placeholder="Remarks" formControlName="remarks" [disabled]="isView">
+                  <mat-option
+                    *ngFor="let remark of remarks"
+                    [value]="remark.name"
+                    >{{ remark.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="row mt-2">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-label>Description</mat-label>
+                <textarea
+                  matInput
+                  placeholder=""
+                  formControlName="description"
+                  [readonly]="isView"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isView" class="col file-wrapper scrollable">
+        <div
+          *ngIf="data.action === 'create'"
+          class="text-center image-upload"
+          ng2FileDrop
+          [ngClass]="{ 'file-over': hasBaseDropZoneOver }"
+          (fileOver)="fileOverBase($event)"
+          [uploader]="uploader"
+        >
+          <button
+            type="button"
+            class="btn btn-info btn-file-upload"
+            (click)="file.click()"
+          >
+            {{ constant.fileConst.upload }}
+          </button>
+
+          <input
+            #file
+            type="file"
+            name="files[]"
+            ng2FileSelect
+            [uploader]="uploader"
+            multiple
+            class="disp-none"
+            accept="application/pdf"
+          />
+        </div>
+
+        <div class="table-responsive" *ngIf="files.length > 0; else elseNoFile">
+          <table class="table mt-3 form-table">
+            <thead class="text-primary">
+              <tr>
+                <th>Title</th>
+                <th width="50" *ngIf="data.action !== 'update'"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let file of files; let i = index">
+                <td>
+                  <input
+                    type="text"
+                    [value]="file.title"
+                    class="pull-left form-files"
+                    (input)="updateFileTitle($event.target.value, i)"
+                    [disabled]="data.action !== 'create'"
+                  />
+                </td>
+                <td nowrap *ngIf="data.action === 'create'">
+                  <button
+                    (click)="removeItem(i)"
+                    mat-raised-button
+                    type="button"
+                    matTooltip="Remove"
+                    [matTooltipPosition]="'right'"
+                    class="btn btn-danger btn-link btn-sm btn-just-icon"
+                  >
+                    <i class="material-icons">close</i>
+                  </button>
+                </td>
+
+                <td nowrap *ngIf="data.action === 'view'">
+                  <button
+                    (click)="viewFile(i)"
+                    mat-raised-button
+                    type="button"
+                    matTooltip="View this file"
+                    [matTooltipPosition]="'right'"
+                    class="btn btn-primary btn-link btn-sm btn-just-icon"
+                  >
+                    <i class="material-icons">visibility</i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #elseNoFile>
+          <div
+            class="text-center"
+            [ngStyle]="{
+              'margin-top': data.action === 'view' ? '100px' : '60px'
+            }"
+            *ngIf="data.action !== 'create'"
+          >
+            <img src="assets/img/nofile.png" width="100" />
+            <div class="no-result-title">{{ constant.fileConst.noFiles }}</div>
+            <div class="no-result-sub">
+              {{ constant.fileConst.didntUpload }}
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <mat-dialog-actions class="mt-1" *ngIf="!isView">
+      <button mat-button mat-dialog-close class="btn-cancel">Cancel</button>
+      <button
+        mat-button
+        type="submit"
+        class="btn-save"
+        [disabled]="!committeeReportsForm.valid || isSaving"
+        [class.spinner]="isSaving"
+      >
+        {{ data.action === "update" ? data.action : "Save" }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

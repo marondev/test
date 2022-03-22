@@ -1,0 +1,99 @@
+<div class="card bg-light">
+  <div class="card-header card-header-primary">
+    <div class="container-fluid">
+      <div class="row header-actions">
+        <div class="col-xl-4 col-md-12 text-center mb-md-3">
+          <button
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="openDialog()"
+          >
+            <i class="material-icons">add</i>&#160;Add
+          </button>
+
+          <button
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="sync()"
+          >
+            <i class="material-icons">sync</i>&#160;Sync
+          </button>
+        </div>
+
+        <div class="col-xl-6 col-md-8">
+          <mat-form-field>
+            <input
+              matInput
+              type="search"
+              class="card-title"
+              placeholder="Search..."
+              [(ngModel)]="params.q"
+              (ngModelChange)="searchModelChanged.next($event)"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <mat-form-field>
+            <mat-select
+              placeholder="Status"
+              [(ngModel)]="status"
+              (ngModelChange)="get()"
+            >
+              <mat-option value="">Current Members</mat-option>
+              <mat-option value="1">Past Members</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body pt-3">
+    <div class="row pl-2 pr-2">
+      <div
+        class="col-xl-3 col-md-6 mt-5 users-wrapper"
+        *ngFor="let member of allMembers"
+      >
+        <div class="card card-profile">
+          <div class="card-avatar">
+            <a [routerLink]="['/members/' + member.id]"
+              ><img
+                src="assets/img/avatar.jpg"
+                appImgPreview
+                [image]="member.avatar"
+                class="img"
+            /></a>
+          </div>
+          <div class="card-body mt-0">
+            <h6 class="card-category text-gray">SB Member</h6>
+            <h4 class="text-capitalize">Hon. {{ member.name }}</h4>
+            <p class="committee">
+              <span
+                *ngFor="let committee of member.committees; let ind = index"
+              >
+                {{
+                  committee.committee.name +
+                    (ind + 1 === member.committees.length ? "" : ",")
+                }}
+              </span>
+            </p>
+
+            <a
+              type="button"
+              class="btn btn-round btn-rose btn-view-info"
+              [routerLink]="['/members/' + member.id]"
+            >
+              <span class="material-icons">visibility</span>
+              View Info
+            </a>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="allMembers.length === 0 && !this.isFetching" class="text-center full-width">
+        <h3 class="no-result">No result</h3>
+      </div>
+    </div>
+  </div>
+</div>

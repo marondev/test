@@ -1,0 +1,147 @@
+<div class="card" *ngIf="user$ | async as user">
+  <div class="card-header card-header-primary">
+    <div class="container-fluid">
+      <div class="row header-actions">
+        <div class="col-xl-4 col-md-12 text-center mb-md-3" *ngIf="user$ | async as user">
+          <button *ngIf="user.role !== 'user'"
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="openDialog()"
+          >
+            <i class="material-icons">add</i>&#160;Add
+          </button>
+
+          <button
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="sync()"
+          >
+            <i class="material-icons">sync</i>&#160;Sync
+          </button>
+        </div>
+
+        <div class="col-xl-6 col-md-8">
+          <mat-form-field>
+            <input
+              matInput
+              type="search"
+              class="card-title"
+              placeholder="Search description..."
+              [(ngModel)]="params.q"
+              (ngModelChange)="searchModelChanged.next($event)"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <mat-form-field>
+            <mat-select
+              placeholder="Type"
+              [(ngModel)]="params.filter"
+              (ngModelChange)="filter()"
+            >
+              <mat-option value="">All</mat-option>
+              <mat-option *ngFor="let type of types" [value]="type.id">{{
+                type.name
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="text-primary">
+          <tr>
+            <th class="pointer" (click)="sort('executed_date')">
+              Date Executed
+              <span class="material-icons position-absolute">
+                {{ isAsc ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+              </span>
+            </th>
+            <th>1st Party</th>
+            <th>2nd Party</th>
+            <th>Description</th>
+            <th width="150" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let memorandum of memoranda">
+            <td>
+              {{ memorandum.executed_date | amDateFormat: "MMM DD, YYYY" }}
+            </td>
+            <td>{{ memorandum.first_party }}</td>
+            <td>{{ memorandum.second_party }}</td>
+            <td>{{ memorandum.description }}</td>
+            <td class="text-center">
+              <button
+                routerLinkActive="router-link-active"
+                mat-raised-button
+                type="button"
+                matTooltip="Show Files"
+                [matTooltipPosition]="'above'"
+                class="btn btn-primary btn-link btn-sm btn-just-icon"
+                (click)="fileDialog(memorandum.id)"
+              >
+                <i class="material-icons">attachment</i>
+              </button>
+              <button
+                routerLinkActive="router-link-active"
+                mat-raised-button
+                type="button"
+                matTooltip="View"
+                [matTooltipPosition]="'above'"
+                class="btn btn-primary btn-link btn-sm btn-just-icon"
+                (click)="openDialog(memorandum.id, 'view')"
+              >
+                <i class="material-icons">visibility</i>
+              </button>
+              <button *ngIf="user.role !== 'user'"
+                mat-raised-button
+                type="button"
+                matTooltip="Remove"
+                [matTooltipPosition]="'above'"
+                class="btn btn-danger btn-link btn-sm btn-just-icon"
+                (click)="confirmDialog(memorandum.id)"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="memoranda.length === 0">
+            <td colSpan="7" class="text-center">
+              <h3 class="no-result">No result</h3>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav
+      aria-label="Pagination"
+      *ngIf="paginator && paginator.displayPages.length"
+    >
+      <ul class="pagination justify-content-end">
+        <li class="page-item pointer" [class.disabled]="!paginator.hasPrev">
+          <a class="page-link" (click)="prevPage()" tabindex="-1">Previous</a>
+        </li>
+        <li
+          *ngFor="let displayPage of paginator.displayPages"
+          class="page-item pointer"
+          [class.active]="paginator.currrentPage === displayPage"
+        >
+          <a class="page-link" (click)="goToPage(displayPage)">{{
+            displayPage
+          }}</a>
+        </li>
+        <li class="page-item pointer" [class.disabled]="!paginator.hasNext">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

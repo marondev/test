@@ -1,0 +1,75 @@
+.members-info-header {
+  background-color: #eee;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding-bottom: 5px;
+}
+
+.card-header {
+  line-height: 40px;
+}
+
+.card-header span {
+  font-size: 1.3em;
+  font-weight: 500;
+}
+
+.avatar {
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border: 3px solid rgb(211, 211, 211);
+}
+
+.name {
+  font-weight: 500;
+}
+
+.committee-content {
+  width: 80%;
+  margin: auto;
+  font-size: 1.2em;
+}
+
+.card-body {
+  padding-top: 10px !important;
+}
+
+.list-content {
+  width: 100%;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.c-title {
+  font-size: 1.2em;
+  font-weight: 900;
+  color: #676767;
+}
+
+.list-content li {
+  list-style: none;
+}
+
+.body-content {
+  display: flex;
+  height: 100%;
+  padding-left: 10px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.body-content:hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.edit-button {
+  margin-right: 10px;
+}
+
+.table th {
+  font-size: .9em;
+}

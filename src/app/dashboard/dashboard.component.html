@@ -1,0 +1,134 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-header card-header-icon card-header-primary">
+                <div class="card-icon">
+                  <i class="material-icons">hourglass_full</i>
+                </div>
+                <h4 class="card-title text-left">Latest Session</h4>
+              </div>
+              <div class="card-body">
+                <div
+                  class="text-center text-gray pb-3"
+                  *ngIf="!session?.number"
+                >
+                  <span class="material-icons" style="font-size: 4em"
+                    >calendar_today</span
+                  >
+                  <h3>No Upcoming Session</h3>
+                </div>
+
+                <div class="table-responsive" *ngIf="session?.number">
+                  <table class="table">
+                    <tr>
+                      <td width="150">Session No.</td>
+                      <td>{{ session?.number }}</td>
+                    </tr>
+                    <tr>
+                      <td width="150">Session Date.</td>
+                      <td>
+                        {{ session?.date | amDateFormat: "MMM DD, YYYY" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="150">Type</td>
+                      <td>{{ session?.type }}</td>
+                    </tr>
+                    <!-- <tr>
+                      <td width="150">Members Present</td>
+                      <td>
+                        <div *ngFor="let member of session?.members">
+                          <a
+                            class="text-capitalize"
+                            [routerLink]="['/members/' + member.id]"
+                            [queryParams]="{ ref: 'dashboard' }"
+                          >
+                            Hon. {{ member.name }}
+                          </a>
+                        </div>
+                      </td>
+                    </tr> -->
+                    <tr>
+                      <td width="150">Description</td>
+                      <td>{{ session?.description }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="card card-stats">
+              <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                  <i class="material-icons">assignment</i>
+                </div>
+                <p class="card-category">Ordinances</p>
+                <h3 class="card-title mb-3">{{ ordinanceCount }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card card-stats">
+              <div class="card-header card-header-primary card-header-icon">
+                <div class="card-icon">
+                  <i class="material-icons">gavel</i>
+                </div>
+                <p class="card-category">Resolutions</p>
+                <h3 class="card-title mb-3">{{ resolutionCount }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header card-header-icon card-header-primary">
+            <div class="card-icon">
+              <i class="material-icons">menu_book</i>
+            </div>
+            <h4 class="card-title text-left">Session File</h4>
+          </div>
+
+          <div class="card-body">
+            <div *ngIf="currentFile">
+              <ng-container *ngIf="isPDF; else imgFileTemplate">
+                <ngx-extended-pdf-viewer
+                  [src]="currentFile"
+                  [useBrowserLocale]="true"
+                  [showBookmarkButton]="false"
+                  [showOpenFileButton]="false"
+                  [showRotateButton]="false"
+                  [showPropertiesButton]="false"
+                  [filenameForDownload]="sessionFiles.filename"
+                  (pdfDownloaded)="log('download')"
+                  (afterPrint)="log('print')"
+                  [zoom]="page-fit"
+                >
+                </ngx-extended-pdf-viewer>
+              </ng-container>
+
+              <ng-template #imgFileTemplate>
+                <img appImgPreview [image]="currentFile" />
+              </ng-template>
+            </div>
+
+            <div *ngIf="!currentFile" class="no-files">
+              <img src="assets/img/nofile.png" />
+              <h3>No Files Found</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

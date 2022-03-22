@@ -1,0 +1,8 @@
+.mat-dialog-content {
+  overflow: hidden !important;
+}
+
+.list:hover {
+  cursor: pointer;
+  background-color: #efefef;
+}

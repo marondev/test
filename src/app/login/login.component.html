@@ -1,0 +1,68 @@
+<div class="login-wrapper">
+  <div class="img-background"></div>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-sm-4 col-offset-4">
+        <div class="card mt-5">
+          <div class="card-header">
+            <div class="card-header card-header-primary text-center">
+              <div class="float-left position-absolute">
+                <img src="assets/img/logo.png" width="30" />
+              </div>
+              <h4 class="card-title">Legisled Tracking System</h4>
+            </div>
+          </div>
+          <div class="card-body pt-0">
+            <form class="form" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+              <div class="card-body">
+                <div class="form-group pl-4 pr-4">
+                  <div class="input-group">
+                    <div class="input-group-text pl-0">
+                      <i class="material-icons">face</i>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Username"
+                      formControlName="username"
+                      maxlength="80"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group pl-4 pr-4">
+                  <div class="input-group">
+                    <div class="input-group-text pl-0">
+                      <i class="material-icons">lock_outline</i>
+                    </div>
+                    <input
+                      type="password"
+                      placeholder="Password"
+                      class="form-control"
+                      formControlName="password"
+                      maxlength="80"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer justify-content-center">
+                <button 
+                class="btn btn-sm btn-primary pt-3 pb-3 pl-5 pr-5"
+                type="submit"
+                [disabled]="!userForm.valid"
+                >
+                  <span class="">LOGIN</span>
+                  <i class="material-icons">arrow_right_alt</i>
+                </button>
+              </div>
+              <p class="mt-4 text-center text-gray" style="font-size: 0.9em">
+                Elevatech Solutions, Inc.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,364 @@
+<div class="container-fluid">
+  <div class="row members-info-header">
+    <div class="col ml-3 mr-3">
+      <button
+        class="btn btn-primary pull-left mat-raised-button"
+        mat-raised-button
+        (click)="back()"
+      >
+        <i class="material-icons">arrow_back</i>Back
+      </button>
+      <button
+        class="btn btn-danger pull-right mat-raised-button"
+        mat-raised-button
+        (click)="confirmDialog()"
+      >
+        <i class="material-icons">delete</i>Delete
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-7 col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <span>Profile</span>
+          <button
+            class="pull-right"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Edit Profile"
+            [matTooltipPosition]="'below'"
+            (click)="editProfile()"
+          >
+            <i class="material-icons">edit</i>
+          </button>
+        </div>
+        <div class="card-body pt-5 text-center">
+          <img
+            class="avatar"
+            src="assets/img/avatar.jpg"
+            appImgPreview
+            [image]="user.pic"
+            width="200"
+          />
+          <h3 class="name text-capitalize">
+            Hon.
+            {{
+              (user.firstname ? user.firstname : "") +
+                (user.middlename ? " " + user.middlename : "") +
+                (user.lastname ? " " + user.lastname : "") +
+                (user.suffix ? " " + user.suffix : "")
+            }}
+          </h3>
+          <div class="committee-content text-capitalize">
+            <span *ngFor="let data of user.committees; let ind = index">
+              {{
+                data.committee.name +
+                  (ind + 1 === user.committees.length ? "" : ",")
+              }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Information Summary</span>
+        </div>
+        <div class="card-body pt-5">
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>Ordinance Authored</td>
+                  <td>{{ user.ordinances?.length || 0 }}</td>
+                </tr>
+                <tr>
+                  <td>Resolution Authored</td>
+                  <td>{{ user.resolutions?.length || 0 }}</td>
+                </tr>
+                <tr>
+                  <td>Session Attended</td>
+                  <td>{{ user.sessions?.length || 0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Experience</span>
+          <button
+            class="pull-right"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Add Experience"
+            [matTooltipPosition]="'below'"
+            (click)="openDialog('experience')"
+          >
+            <i class="material-icons">add</i>
+          </button>
+        </div>
+        <div class="card-body pt-5">
+          <div class="body-content" *ngFor="let experience of user.experiences">
+            <ul class="list-content">
+              <li class="c-title">{{ experience.title }}</li>
+              <li>{{ experience.description }}</li>
+              <li>{{ experience.company }}</li>
+              <li>{{ experience.location }}</li>
+              <li>{{ experience.date }}</li>
+            </ul>
+            <div class="edit-button">
+              <button mat-icon-button color="primary">
+                <i class="material-icons">edit</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="body-content" *ngIf="user.experiences?.length === 0">
+            <h4 class="no-result full-width text-center mt-3">No result</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Awards</span>
+          <button
+            class="pull-right"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Add Award"
+            [matTooltipPosition]="'below'"
+            (click)="openDialog('award')"
+          >
+            <i class="material-icons">add</i>
+          </button>
+        </div>
+        <div class="card-body pt-5">
+          <div class="body-content" *ngFor="let award of user.awards">
+            <ul class="list-content">
+              <li class="c-title">{{ award.title }}</li>
+              <li>{{ award.description }}</li>
+              <li>{{ award.association }}</li>
+              <li>{{ award.date }}</li>
+            </ul>
+            <div class="edit-button">
+              <button mat-icon-button color="primary">
+                <i class="material-icons">edit</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="body-content" *ngIf="user.awards?.length === 0">
+            <h4 class="no-result full-width text-center mt-3">No result</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Projects</span>
+          <button
+            class="pull-right"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Add Project"
+            [matTooltipPosition]="'below'"
+            (click)="openDialog('project')"
+          >
+            <i class="material-icons">add</i>
+          </button>
+        </div>
+        <div class="card-body pt-5">
+          <div class="body-content" *ngFor="let project of user.projects">
+            <ul class="list-content">
+              <li class="c-title">{{ project.name }}</li>
+              <li>{{ project.description }}</li>
+              <li>{{ project.date }}</li>
+            </ul>
+            <div class="edit-button">
+              <button mat-icon-button color="primary">
+                <i class="material-icons">edit</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="body-content" *ngIf="user.projects?.length === 0">
+            <h4 class="no-result full-width text-center mt-3">No result</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Education</span>
+          <button
+            class="pull-right"
+            mat-mini-fab
+            color="primary"
+            matTooltip="Add Education"
+            [matTooltipPosition]="'below'"
+            (click)="openDialog('education')"
+          >
+            <i class="material-icons">add</i>
+          </button>
+        </div>
+        <div class="card-body pt-5">
+          <div class="body-content" *ngFor="let education of user.educations">
+            <ul class="list-content">
+              <li class="c-title">{{ education.school }}</li>
+              <li>{{ education.degree }}</li>
+              <li>{{ education.date }}</li>
+            </ul>
+            <div class="edit-button">
+              <button mat-icon-button color="primary">
+                <i class="material-icons">edit</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="body-content" *ngIf="user.educations?.length === 0">
+            <h4 class="no-result full-width text-center mt-3">No result</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-5 col-md-12">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <span>Ordinances</span>
+        </div>
+        <div class="card-body pt-5">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <tr>
+                  <th width="100">Ordinance No.</th>
+                  <th>Title</th>
+                  <th width="100">Date Approved</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ordinance of user.ordinances">
+                  <td>{{ ordinance.number }}</td>
+                  <td>{{ ordinance.title }}</td>
+                  <td>
+                    {{ ordinance.approved_date | amDateFormat: "MMM DD, YYYY" }}
+                  </td>
+                  0
+                </tr>
+                <tr *ngIf="user.ordinances?.length === 0">
+                  <td colSpan="3" class="text-center">
+                    <h4 class="no-result">No result</h4>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            class="full-width"
+            *ngIf="user.ordinances?.length !== 0"
+            [routerLink]="['/ordinances']"
+            [queryParams]="{ id: user.id }"
+          >
+            View all
+          </button>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Resolutions</span>
+        </div>
+        <div class="card-body pt-5">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <tr>
+                  <th width="100">Resolution No.</th>
+                  <th>Title</th>
+                  <th width="100">Date Approved</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let resolution of user.resolutions">
+                  <td>{{ resolution.number }}</td>
+                  <td>{{ resolution.title }}</td>
+                  <td>
+                    {{
+                      resolution.approved_date | amDateFormat: "MMM DD, YYYY"
+                    }}
+                  </td>
+                </tr>
+                <tr *ngIf="user.resolutions?.length === 0">
+                  <td colSpan="3" class="text-center">
+                    <h4 class="no-result">No result</h4>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            class="full-width"
+            *ngIf="user.resolutions?.length !== 0"
+            [routerLink]="['/resolutions']"
+            [queryParams]="{ id: user.id }"
+          >
+            View all
+          </button>
+        </div>
+      </div>
+
+      <div class="card mt-5">
+        <div class="card-header card-header-primary">
+          <span>Sessions</span>
+        </div>
+        <div class="card-body pt-5">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <tr>
+                  <th width="100">Session No.</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let session of user.sessions">
+                  <td>{{ session.number }}</td>
+                  <td>
+                    {{ session.date.toString() | amDateFormat: "MMM DD, YYYY" }}
+                  </td>
+                </tr>
+                <tr *ngIf="user.sessions?.length === 0">
+                  <td colSpan="2" class="text-center">
+                    <h4 class="no-result">No result</h4>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button
+            mat-stroked-button
+            color="primary"
+            class="full-width"
+            *ngIf="user.sessions?.length !== 0"
+            [routerLink]="['/sessions']"
+          >
+            View all
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

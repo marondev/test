@@ -1,0 +1,17 @@
+.wrapper::after {
+  content: "";
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.97;
+}
+.main-panel {
+  z-index: 2;
+}
+
+::ng-deep .main-content {
+  padding: 0 !important;
+  margin-top: 0 !important;
+}

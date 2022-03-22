@@ -1,0 +1,45 @@
+<div class="card">
+  <div class="card-header card-header-primary header-actions">
+    <h4 class="mb-0">Settings</h4>
+  </div>
+
+  <div class="card-body">
+    <div class="container-fluid p-5">
+      <div class="row">
+        <div class="col">
+          <div class="avatar-wrapper" (click)="file.click()">
+            <img
+              appImgPreview
+              [image]="logo"
+              src="assets/img/upload.png"
+              class="avatar"
+            />
+            <div class="avatar-text">
+              {{ logo ? "Edit Logo" : "Upload Logo" }}
+            </div>
+          </div>
+          <input
+            #file
+            type="file"
+            ng2FileSelect
+            [uploader]="uploader"
+            accept="image/*"
+          />
+        </div>
+      </div>
+      <input type="file" class="file-input" #fileUpload />
+
+      <div class="text-center mt-4">
+        <button
+          class="btn btn-primary mat-raised-button"
+          mat-raised-button
+          type="submit"
+          [disabled]="!logo"
+          (click)="update()"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

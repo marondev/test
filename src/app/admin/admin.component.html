@@ -1,0 +1,16 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+<div class="wrapper">
+  <div class="sidebar" data-color="blue">
+    <app-sidebar></app-sidebar>
+    <div
+      class="sidebar-background"
+      style="background-image: url(assets/img/sidebar-3.jpg)"
+    ></div>
+  </div>
+  <div class="main-panel">
+    <app-navbar></app-navbar>
+    <div class="p-5">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

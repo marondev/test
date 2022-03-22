@@ -1,0 +1,77 @@
+<div class="file-modal" [ngClass]="isPDF ? '' : 'scrollable'">
+  <ng-container *ngIf="hasFiles; else elseHasFile">
+    <div mat-dialog-title class="file-items scrollable pl-3 pr-3">
+      <ng-container *ngIf="data.segment !== 'references'; else elseSegment">
+        <a
+          *ngFor="let item of items; let ind = index"
+          (click)="onClickReadFile(item, ind)"
+          class="pointer"
+          [ngClass]="item.isActive ? 'active' : ''"
+          [matTooltip]="item.title"
+        >
+          <section class="file-image text-center" [ngClass]="item.isActive ? 'text-primary' : ''">
+            <i class="material-icons">{{ item.isActive ? 'visibility' : 'attachment'}}</i>
+          </section>
+          <section class="file-name">{{ item.title | slice:0:8 }}{{ item.title.length > 8 ? '...' : ''}}</section>
+          <i class="material-icons delete" (click)="confirmDialog(item.id)">delete</i>
+        </a>
+      </ng-container>
+      <ng-template #elseSegment>
+        <a class="pointer" [matTooltip]="items.title">
+          <section class="file-image text-center">
+            <i class="material-icons">attachment</i>
+          </section>
+          <section class="file-name">{{ items.title | slice:0:8 }}{{ items.title.length > 8 ? '...' : ''}}</section>
+        </a>
+      </ng-template>
+    </div>
+
+    <mat-dialog-content
+      *ngIf="items"
+      [ngClass]="isPDF ? 'overflow-hidden' : ''"
+    >
+      <div class="container-fluid" [ngClass]="isPDF ? 'scrollable' : ''">
+        <div class="row">
+          <div class="text-center col">
+            <ng-container *ngIf="isPDF; else imgFileTemplate">
+              <ngx-extended-pdf-viewer
+                [src]="currentFile?.blobRaw"
+                [useBrowserLocale]="true"
+                [showBookmarkButton]="false"
+                [showOpenFileButton]="false"
+                [showRotateButton]="false"
+                [showPropertiesButton]="false"
+                [textLayer]="true"
+                [filenameForDownload]="currentFile?.filename"
+                (pdfDownloaded)="log('download')"
+                (afterPrint)="log('print')"
+                [height]="'65vh'"
+              >
+              </ngx-extended-pdf-viewer>
+            </ng-container>
+
+            <ng-template #imgFileTemplate>
+              <img [src]="currentFile?.blob" width="720px" />
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+  </ng-container>
+
+  <ng-template #elseHasFile>
+    <div class="text-center full-width" *ngIf="!loading" style="margin-top: 150px">
+      <img src="assets/img/nofile.png" />
+      <h3>No Files Found</h3>
+      <p>They didn't upload any files.</p>
+    </div>
+  </ng-template>
+
+  <!-- <mat-dialog-actions
+    class="mt-3"
+    *ngIf="!loading"
+    style="margin-bottom: -10px"
+  >
+    <button mat-button mat-dialog-close class="btn-cancel">Close</button>
+  </mat-dialog-actions> -->
+</div>

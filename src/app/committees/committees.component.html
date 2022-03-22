@@ -1,0 +1,107 @@
+<div class="card">
+  <div class="card-header card-header-primary">
+    <div class="container-fluid">
+      <div class="row header-actions">
+        <div class="col-xl-4 col-md-12 text-center mb-md-3">
+          <button
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="openDialog()"
+          >
+            <i class="material-icons">add</i>&#160;Add
+          </button>
+
+          <button
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="sync()"
+          >
+            <i class="material-icons">sync</i>&#160;Sync
+          </button>
+        </div>
+
+        <div class="col-xl-8 col-md-12 col-sm-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="search"
+              class="card-title"
+              placeholder="Search for committee..."
+              [(ngModel)]="params.q"
+              (ngModelChange)="searchModelChanged.next($event)"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="text-primary">
+          <tr>
+            <th>Committee</th>
+            <th width="150" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of committees">
+            <td>{{ item.name }}</td>
+            <td class="text-center">
+              <button
+                mat-raised-button
+                type="button"
+                matTooltip="Edit"
+                [matTooltipPosition]="'above'"
+                class="btn btn-primary btn-link btn-sm btn-just-icon"
+                (click)="openDialog(item.id, 'update')"
+              >
+                <i class="material-icons">edit</i>
+              </button>
+              <button
+                mat-raised-button
+                type="button"
+                matTooltip="Remove"
+                [matTooltipPosition]="'above'"
+                class="btn btn-danger btn-link btn-sm btn-just-icon"
+                (click)="confirmDialog(item.id)"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="committees.length === 0">
+            <td colSpan="2" class="text-center">
+              <h3 class="no-result">No result</h3>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav
+      aria-label="Pagination"
+      *ngIf="paginator && paginator.displayPages.length"
+    >
+      <ul class="pagination justify-content-end">
+        <li class="page-item pointer" [class.disabled]="!paginator.hasPrev">
+          <a class="page-link" (click)="prevPage()" tabindex="-1">Previous</a>
+        </li>
+        <li
+          *ngFor="let displayPage of paginator.displayPages"
+          class="page-item pointer"
+          [class.active]="paginator.currrentPage === displayPage"
+        >
+          <a class="page-link" (click)="goToPage(displayPage)">{{
+            displayPage
+          }}</a>
+        </li>
+        <li class="page-item pointer" [class.disabled]="!paginator.hasNext">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

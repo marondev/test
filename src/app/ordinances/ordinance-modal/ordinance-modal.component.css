@@ -1,0 +1,29 @@
+.mat-dialog-content {
+  overflow: hidden;
+}
+
+.status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.status::before, .status::after{
+  content: '';
+  width: calc(50% - 40px);
+  border-top: 1px dashed  rgb(71, 71, 71);;
+  height: 1px; 
+  position: absolute;
+}
+
+.status::before {
+  margin-left: 15px;
+  left: 0;
+}
+
+.status::after {
+  right: 0;
+  margin-right: 15px;
+}

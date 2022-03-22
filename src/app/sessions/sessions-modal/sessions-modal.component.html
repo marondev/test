@@ -1,0 +1,191 @@
+<h2 mat-dialog-title>
+  <i class="material-icons" style="font-size: 0.8em">{{ titleIcon }}</i>
+  {{ data.title }}
+</h2>
+<mat-dialog-content class="mat-typography">
+  <form
+    class="container-fluid scrollable"
+    [formGroup]="sessionForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <div class="row">
+      <div class="col">
+        <div class="row form-data-wrapper">
+          <div class="col form-data-content">
+            <div class="row mt-3">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <input
+                  matInput
+                  type="date"
+                  placeholder="Date"
+                  formControlName="date"
+                  [readonly]="isView || data.action === 'update'"
+                />
+              </mat-form-field>
+
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Session Number"
+                  formControlName="number"
+                  maxlength="50"
+                  [readonly]="isView"
+                />
+              </mat-form-field>
+
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-select placeholder="Type" formControlName="type" [disabled]="isView">
+                  <mat-option *ngFor="let type of types" [value]="type.id">{{
+                    type.name
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+
+            <div class="row">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-label>Members</mat-label>
+                <mat-select formControlName="members" multiple [disabled]="isView">
+                  <mat-option
+                    *ngFor="let member of allMembers"
+                    [value]="member.id"
+                    >Hon. {{ member.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <div class="col" [class.not-allowed]="isView">
+                <mat-checkbox
+                  #isAll
+                  (change)="isAllMembers(isAll)"
+                  formControlName="members_present"
+                  [disabled]="isView"
+                  >All members are present</mat-checkbox
+                >
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-label>Minute Description</mat-label>
+                <textarea
+                  matInput
+                  placeholder=""
+                  formControlName="description"
+                  [readonly]="isView"
+                ></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="row mt-2">
+              <mat-form-field class="col" [class.not-allowed]="isView">
+                <mat-label>Note</mat-label>
+                <textarea
+                  matInput
+                  placeholder=""
+                  formControlName="note"
+                  maxlength="250"
+                  [readonly]="isView"
+                ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isView" class="col file-wrapper scrollable">
+        <div
+          class="text-center image-upload"
+          ng2FileDrop
+          [ngClass]="{ 'file-over': hasBaseDropZoneOver }"
+          (fileOver)="fileOverBase($event)"
+          [uploader]="uploader"
+        >
+          <button
+            type="button"
+            class="btn btn-info btn-file-upload"
+            (click)="file.click()"
+          >
+            {{ constant.fileConst.upload }}
+          </button>
+
+          <input
+            #file
+            type="file"
+            name="files[]"
+            ng2FileSelect
+            [uploader]="uploader"
+            multiple
+            class="disp-none"
+            accept="application/pdf"
+          />
+        </div>
+
+        <div class="table-responsive" *ngIf="files.length > 0; else elseNoFile">
+          <table class="table mt-3 form-table">
+            <thead class="text-primary">
+              <tr>
+                <th>Title</th>
+                <th width="50"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let file of files; let i = index">
+                <td>
+                  <input
+                    type="text"
+                    [value]="file.title"
+                    class="pull-left form-files"
+                    (input)="updateFileTitle($event.target.value, i)"
+                    [disabled]="data.action === 'view'"
+                  />
+                </td>
+                <td nowrap *ngIf="data.action !== 'view'">
+                  <button
+                    (click)="removeItem(i)"
+                    mat-raised-button
+                    type="button"
+                    matTooltip="Remove"
+                    [matTooltipPosition]="'right'"
+                    class="btn btn-danger btn-link btn-sm btn-just-icon"
+                  >
+                    <i class="material-icons">close</i>
+                  </button>
+                </td>
+
+                <td nowrap *ngIf="data.action === 'view'">
+                  <button
+                    (click)="viewFile(i)"
+                    mat-raised-button
+                    type="button"
+                    matTooltip="View this file"
+                    [matTooltipPosition]="'right'"
+                    class="btn btn-primary btn-link btn-sm btn-just-icon"
+                  >
+                    <i class="material-icons">visibility</i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <mat-dialog-actions class="mt-1" *ngIf="!isView">
+      <button mat-button mat-dialog-close class="btn-cancel">Cancel</button>
+      <button
+        mat-button
+        type="submit"
+        class="btn-save"
+        [disabled]="!sessionForm.valid || isSaving"
+        [class.spinner]="isSaving"
+      >
+        {{ data.action === "update" ? data.action : "Save" }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

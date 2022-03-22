@@ -1,0 +1,47 @@
+{
+  "productName": "Legisled",
+  "asar": true,
+  "asarUnpack": "data/",
+  "directories": {
+    "buildResources": "logo/",
+    "output": "release/"
+  },
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.map",
+    "!package.json",
+    "!package-lock.json"
+  ],
+  "extraResources": [
+    {
+      "from": "dist",
+      "to": "app",
+      "filter": [
+        "**/*"
+      ]
+    }
+  ],
+  "win": {
+    "target": [
+      "nsis"
+    ]
+  },
+  "nsis": {
+    "oneClick": true,
+    "createDesktopShortcut": "always"
+  },
+  "portable": {
+    "splashImage": "dist/assets/icons/icon.bmp"
+  },
+  "mac": {
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "target": [
+      "AppImage"
+    ]
+  }
+}

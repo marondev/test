@@ -1,0 +1,152 @@
+<div class="card"  *ngIf="user$ | async as user">
+  <div class="card-header card-header-primary">
+    <div class="container-fluid">
+      <div class="row header-actions">
+        <div class="col-xl-4 col-md-12 text-center mb-md-3">
+          <button *ngIf="user.role !== 'user'"
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="openDialog()"
+          >
+            <i class="material-icons">add</i>&#160;Add
+          </button>
+
+          <button
+            class="btn btn-primary mat-raised-button border-white"
+            mat-raised-button
+            (click)="sync()"
+          >
+            <i class="material-icons">sync</i>&#160;Sync
+          </button>
+        </div>
+
+        <div class="col-xl-6 col-md-8">
+          <mat-form-field>
+            <input
+              matInput
+              type="search"
+              class="card-title"
+              [placeholder]="constant.searchConst.vehicleFranchise"
+              [(ngModel)]="params.q"
+              (ngModelChange)="searchModelChanged.next($event)"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xl-2 col-md-4">
+          <mat-form-field>
+            <mat-select
+              placeholder="Status"
+              [(ngModel)]="params.filter"
+              (ngModelChange)="filter()"
+            >
+              <mat-option *ngFor="let status of statuses" [value]="status.id">{{
+                status.name
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="text-primary">
+          <tr>
+            <th width="150">Franchise No.</th>
+            <th>Owner</th>
+            <th class="pointer" (click)="sort('date')">
+              Date Issued
+              <span class="material-icons position-absolute">
+                {{ isAsc ? "keyboard_arrow_down" : "keyboard_arrow_up" }}
+              </span>
+            </th>
+            <th>Plate No.</th>
+            <th>Vehicle Type</th>
+            <th width="150" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vehicleFranchise of vehicleFranchises">
+            <td>{{ vehicleFranchise.number }}</td>
+            <td>{{ vehicleFranchise.owner }}</td>
+            <td>{{ vehicleFranchise.date | amDateFormat: "MMM DD, YYYY" }}</td>
+            <td>{{ vehicleFranchise.plate_number }}</td>
+            <td>
+              {{
+                vehicleFranchise.type
+                  ? statuses[vehicleFranchise.type].name
+                  : ""
+              }}
+            </td>
+            <td class="text-center">
+              <button
+                routerLinkActive="router-link-active"
+                mat-raised-button
+                type="button"
+                matTooltip="Show Files"
+                [matTooltipPosition]="'above'"
+                class="btn btn-primary btn-link btn-sm btn-just-icon"
+                (click)="fileDialog(vehicleFranchise.number)"
+              >
+                <i class="material-icons">attachment</i>
+              </button>
+              <button
+                routerLinkActive="router-link-active"
+                mat-raised-button
+                type="button"
+                matTooltip="View"
+                [matTooltipPosition]="'above'"
+                class="btn btn-primary btn-link btn-sm btn-just-icon"
+                (click)="openDialog(vehicleFranchise.number, 'view')"
+              >
+                <i class="material-icons">visibility</i>
+              </button>
+              <button *ngIf="user.role !== 'user'"
+                mat-raised-button
+                type="button"
+                matTooltip="Remove"
+                [matTooltipPosition]="'above'"
+                class="btn btn-danger btn-link btn-sm btn-just-icon"
+                (click)="confirmDialog(vehicleFranchise.number)"
+              >
+                <i class="material-icons">close</i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="vehicleFranchises.length === 0">
+            <td colSpan="7" class="text-center">
+              <h3 class="no-result">No result</h3>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <nav
+      aria-label="Pagination"
+      *ngIf="paginator && paginator.displayPages.length"
+    >
+      <ul class="pagination justify-content-end">
+        <li class="page-item pointer" [class.disabled]="!paginator.hasPrev">
+          <a class="page-link" (click)="prevPage()" tabindex="-1">Previous</a>
+        </li>
+        <li
+          *ngFor="let displayPage of paginator.displayPages"
+          class="page-item pointer"
+          [class.active]="paginator.currrentPage === displayPage"
+        >
+          <a class="page-link" (click)="goToPage(displayPage)">{{
+            displayPage
+          }}</a>
+        </li>
+        <li class="page-item pointer" [class.disabled]="!paginator.hasNext">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
